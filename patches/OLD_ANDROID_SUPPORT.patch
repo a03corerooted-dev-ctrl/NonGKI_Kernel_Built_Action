@@ -5,14 +5,13 @@ Subject: [PATCH] Support MIUI and Android 11-12
 
 This break boot on Android 13+
 ---
- fs/sdcardfs/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/sdcardfs/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/sdcardfs/Kconfig b/fs/sdcardfs/Kconfig
-index a0e2abcaeb67..b208d7f6c3a9 100644
 --- a/fs/sdcardfs/Kconfig
 +++ b/fs/sdcardfs/Kconfig
-@@ -1,13 +1,13 @@
+@@ -1,7 +1,7 @@
  config SDCARD_FS
  	tristate "sdcard file system"
  	depends on CONFIGFS_FS
@@ -20,11 +19,5 @@ index a0e2abcaeb67..b208d7f6c3a9 100644
 +	default y
  	help
  	  Sdcardfs is based on Wrapfs file system.
- 
- config SDCARD_FS_FADV_NOACTIVE
- 	bool "sdcardfs fadvise noactive support"
- 	depends on FADV_NOACTIVE
--	default n
-+	default y
- 	help
- 	  Sdcardfs supports fadvise noactive mode.
+-- 
+2.43.0
