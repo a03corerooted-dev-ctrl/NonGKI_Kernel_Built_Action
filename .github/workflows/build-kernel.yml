@@ -1,4 +1,4 @@
-name: Build Kernel
+name: Build Pulsar Kernel
 on:
   push:
     branches:
@@ -470,7 +470,7 @@ jobs:
       if: env.CHECK_FILE_IS_OK == 'true'
       uses: actions/upload-artifact@v6
       with:        
-        name: ${{ env.KERNEL_IMAGE_NAME }}${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}-${{ env.DEVICE }}-${{ env.BUILD_TIME }}
+        name: Pulsar-${{ env.KERNEL_IMAGE_NAME }}${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}-${{ env.DEVICE }}-${{ env.BUILD_TIME }}
         path: kernel_workspace/android-kernel/out/arch/${{ env.KERNEL_ARCH }}/boot/${{ env.KERNEL_IMAGE_NAME }}
 
     - name: Upload DTBO image
@@ -484,5 +484,5 @@ jobs:
       if: env.MAKE_BOOT_IMAGE_IS_OK == 'true'
       uses: actions/upload-artifact@v6
       with:
-        name: boot${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}-${{ env.DEVICE }}-${{ env.BUILD_TIME }}
+        name: Pulsar-boot${{ env.LOCALVERSION }}${{ env.UPLOADNAME }}-${{ env.DEVICE }}-${{ env.BUILD_TIME }}
         path: kernel_workspace/boot.img
