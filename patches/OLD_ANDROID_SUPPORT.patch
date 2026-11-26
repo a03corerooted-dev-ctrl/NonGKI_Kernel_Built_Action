@@ -11,7 +11,7 @@ This break boot on Android 13+
 diff --git a/fs/sdcardfs/Kconfig b/fs/sdcardfs/Kconfig
 --- a/fs/sdcardfs/Kconfig
 +++ b/fs/sdcardfs/Kconfig
-@@ -1,7 +1,7 @@
+@@ -1,6 +1,6 @@
  config SDCARD_FS
  	tristate "sdcard file system"
  	depends on CONFIGFS_FS
