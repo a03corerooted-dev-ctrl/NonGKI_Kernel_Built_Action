@@ -1,5 +1,8 @@
 name: Build Kernel
 on:
+  push:
+    branches:
+      - s-shockwave-kernel
   workflow_dispatch:
     inputs:
       select_device:
@@ -42,10 +45,14 @@ jobs:
         name: Generate build matrix
         run: |
           targets=()
-          if [[ "${{ github.event.inputs.build_ksun }}" == "true" ]]; then targets+=("ksun"); fi
-          if [[ "${{ github.event.inputs.build_ksun_old }}" == "true" ]]; then targets+=("ksun-old"); fi
-          if [[ "${{ github.event.inputs.build_xxksu }}" == "true" ]]; then targets+=("xxksu"); fi
-          if [[ "${{ github.event.inputs.build_xxksu_old }}" == "true" ]]; then targets+=("xxksu-old"); fi
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            targets+=("xxksu-old")
+          else
+            if [[ "${{ github.event.inputs.build_ksun }}" == "true" ]]; then targets+=("ksun"); fi
+            if [[ "${{ github.event.inputs.build_ksun_old }}" == "true" ]]; then targets+=("ksun-old"); fi
+            if [[ "${{ github.event.inputs.build_xxksu }}" == "true" ]]; then targets+=("xxksu"); fi
+            if [[ "${{ github.event.inputs.build_xxksu_old }}" == "true" ]]; then targets+=("xxksu-old"); fi
+          fi
           json=$(printf '%s\n' "${targets[@]}" | jq -R . | jq -s '{target: .}')
           echo "matrix<<EOF" >> $GITHUB_OUTPUT
           echo "$json" >> $GITHUB_OUTPUT
@@ -55,7 +62,7 @@ jobs:
     needs: generate-build-matrix
     runs-on: ubuntu-24.04
     env:
-      DEVICE: ${{ github.event.inputs.select_device }}
+      DEVICE: ${{ github.event.inputs.select_device || 'merlin' }}
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
       CCACHE_HARDLINK: "true"
@@ -299,23 +306,18 @@ jobs:
                     }
                 fi
         fi
-        if [ ${{ env.DISABLE_LTO }} = true ]; then
+        if [ "${{ env.DISABLE_LTO }}" = "true" ]; then
             sed -i 's/CONFIG_LTO=y/CONFIG_LTO=n/' arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
             sed -i 's/CONFIG_LTO_CLANG=y/CONFIG_LTO_CLANG=n/' arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
             sed -i 's/CONFIG_THINLTO=y/CONFIG_THINLTO=n/' arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
             echo "CONFIG_LTO_NONE=y" >> arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
         fi
-        if [ ${{ env.DISABLE_CC_WERROR }} = true ]; then
+        if [ "${{ env.DISABLE_CC_WERROR }}" = "true" ]; then
             echo "CONFIG_CC_WERROR=n" >> arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
         fi
-        if [ ${{ env.OLD_ANDROID_SUPPORT }} = true ]; then
+        if [ "${{ env.OLD_ANDROID_SUPPORT }}" = "true" ]; then
+            git apply --check $GITHUB_WORKSPACE/patches/OLD_ANDROID_SUPPORT.patch
             git apply $GITHUB_WORKSPACE/patches/OLD_ANDROID_SUPPORT.patch
-            if grep -q "CONFIG_MMC_CRYPTO_LEGACY" arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig; then
-                sed -i 's/# CONFIG_MMC_CRYPTO_LEGACY is not set/CONFIG_MMC_CRYPTO_LEGACY=y/g' arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
-                sed -i 's/CONFIG_MMC_CRYPTO_LEGACY=n/CONFIG_MMC_CRYPTO_LEGACY=y/g' arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
-            else
-                echo "CONFIG_MMC_CRYPTO_LEGACY=y" >> arch/${{ env.KERNEL_ARCH }}/configs/${DEVICE}_defconfig
-            fi
         fi
         if [ ${{ env.FIX_WIFI_SPEED }} = true ]; then
             rm -rf drivers/misc/mediatek/connectivity
