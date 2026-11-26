@@ -1,5 +1,5 @@
 <div align="start">
-  <h1>Kernel Build Action for Lancelot & Merlin</h1>
+  <h1>Kernel Build Action for MT6768 Devices</h1>
   <h3><i>Powered By GitHub Actions</i></h3>
 </div>
 
@@ -61,12 +61,12 @@ A workflow to automatically build an Android kernel
 ## Options Guide
 
 > [!NOTE]
-> All options are located in [config.env](config.env)
+> Build options are split between [config-ksun.env](config-ksun.env) (KernelSU-Next) and [config-xxksu.env](config-xxksu.env) (xxksu).
 
 | Base section options | Optional | Description | Example value |
 |---------------------|----------|-------------|----------------|
-| KERNEL_SOURCE | <div align="center">❌</div> | Link to kernel repository | `https://github.com/Jbub5/android_kernel_xiaomi_mt6768` |
-| KERNEL_SOURCE_BRANCH | <div align="center">❌</div> | Branch name of kernel repository | <div align="center">`kernel-tree`</div> |
+| KERNEL_SOURCE | <div align="center">❌</div> | Link to kernel repository | `https://github.com/a03corerooted-dev-ctrl/android_kernel_xiaomi_mt6768-s` |
+| KERNEL_SOURCE_BRANCH | <div align="center">❌</div> | Branch name of kernel repository | <div align="center">`kernel-tree-6`</div> |
 | KERNEL_ARCH | <div align="center">❌</div> | The Linux kernel architecture | <div align="center">`arm64`</div> |
 | KERNEL_IMAGE_NAME | <div align="center">❌</div> | Format of the kernel image for flashable AnyKernel3 zip | <div align="center">`Image.gz-dtb`</div> |
 
@@ -114,7 +114,7 @@ A workflow to automatically build an Android kernel
 | Anykernel3 section options | Optional | Description | Example value |
 |----------------------------|----------|-------------|---------------|
 | USE_ANYKERNEL3 | <div align="center">✅</div> | Enable creating flashable AnyKernel3 zip and accounting for options written below | <div align="center">`true`</div> |
-| ANYKERNEL3_SOURCE | <div align="center">❌</div> | Link to AnyKernel3 source | `https://github.com/Jbub5/AnyKernel3.git` |
+| ANYKERNEL3_SOURCE | <div align="center">❌</div> | Link to AnyKernel3 source | `https://github.com/a03corerooted-dev-ctrl/AnyKernel3.git` |
 | ANYKERNEL3_BRANCH | <div align="center">✅</div> | Branch name of AnyKernel3 repository | <div align="center">`proton`</div> |
 
 <br>
