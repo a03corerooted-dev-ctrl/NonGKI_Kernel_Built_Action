@@ -1,6 +1,6 @@
 <div align="start">
-  <h1>Kernel Build Action for MT6768 Devices</h1>
-  <h3><i>Powered By GitHub Actions</i></h3>
+  <h1>Pulsar Kernel Build System</h1>
+  <h3><i>Redmi Note 9 (merlin) · MediaTek MT6768 · ARM64</i></h3>
 </div>
 
 A workflow to automatically build an Android kernel
